@@ -63,3 +63,5 @@ try {
 }
 
 $database->closeConnection();
+
+header('Location: /');
