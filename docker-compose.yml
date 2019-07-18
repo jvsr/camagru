@@ -1,0 +1,35 @@
+version: '2'
+services:
+  web:
+    image: keopx/apache-php:7.0
+    ports:
+      - "8008:80"
+    links:
+      - mysql
+    volumes:
+      - /Users/jvisser/Documents/GitHub/camagru/data/www:/var/www/html
+      - ./config/vhosts:/etc/apache2/sites-enabled
+      - ./config/php/7.0/php.ini:/etc/php/7.0/apache2/php.ini
+      - ./config/apache2:/etc/apache2
+    working_dir: /var/www/html
+    environment:
+      - PHP_SENDMAIL_DOMAIN=mail-student.codam.nl:25
+  mysql:
+    image: keopx/mysql:5.5
+    ports:
+      - "3306:3306"
+    volumes:
+      - /Users/jvisser/Documents/GitHub/camagru/data/database/:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=codam
+      - MYSQL_DATABASE=camagru
+      - MYSQL_USER=jvisser
+      - MYSQL_PASSWORD=camagruadmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    links:
+      - mysql
+    environment:
+      - PMA_HOST=mysql
