@@ -21,7 +21,7 @@ services:
     volumes:
       - /Users/jvisser/Documents/GitHub/camagru/data/database/:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=codam
+      - MYSQL_ROOT_PASSWORD=camagruadmin
       - MYSQL_DATABASE=camagru_db
       - MYSQL_USER=jvisser
       - MYSQL_PASSWORD=camagruadmin
