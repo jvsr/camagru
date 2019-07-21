@@ -16,18 +16,22 @@ function setActive () {
 
 function submitForm() {
 	event.preventDefault();
-	var formElement = document.querySelector("form");
-	var formData = new FormData(formElement);
-	var xhttp = new XMLHttpRequest();
 
-	console.log(formData);
+	let formElement = document.querySelector("form");
+	let formData = new FormData(formElement);
 
-	xhttp.open(formElement.method, formElement.action);
-	// xhttp.send();
+	let xhttp = new XMLHttpRequest();
+	xhttp.onload = function () {
+		if (xhttp.status === 400) {
+			console.log(xhttp.response);
+			console.log(xhttp.responseText);
+		}
+	};
+	xhttp.open(formElement.method, formElement.action, true);
+	xhttp.send(formData);
 };
 
 function redirectRegister() {
 	event.preventDefault();
 	document.location.href = "register.php";
-	console.log("a");
 };
