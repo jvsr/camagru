@@ -4,7 +4,6 @@
 	<title>Camagru | Login</title>
 	<link rel="icon" href="favicon.ico" type="image/x-icon" />
 	<link rel="stylesheet" type="text/css" href="styles/styles.css">
-	<script type="text/javascript" charset="utf-8" src="scripts/setActive.js"></script>
 </head>
 
 <body>
@@ -24,5 +23,6 @@
 		setActive();
 	};
 </script>
+<script type="text/javascript" charset="utf-8" src="scripts/setActive.js"></script>
 </body>
 </html>

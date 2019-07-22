@@ -18,8 +18,6 @@ $user = new User($conn);
 // Get posted data
 $data = json_decode(file_get_contents("php://input"));
 
-echo "aaa" . json_decode(file_get_contents("php://input"));
-echo print_r($_POST);
 // Set object property values
 $user->firstname = $data->firstname;
 $user->lastname = $data->lastname;
@@ -30,13 +28,13 @@ $user->password = $data->password;
 // Create user
 if (
     // If all data is filled in
-    !empty($user->firstname)
-    // !empty($user->lastname) &&
-    // !empty($user->username) &&
-    // !empty($user->email) &&
-    // !empty($user->password) &&
-    // // And user creation succeeds
-    // $user->create()
+    !empty($user->firstname) &&
+    !empty($user->lastname) &&
+    !empty($user->username) &&
+    !empty($user->email) &&
+    !empty($user->password) &&
+    // And user creation succeeds
+    $user->create()
 ) {
     // Set response code
     http_response_code(200);
