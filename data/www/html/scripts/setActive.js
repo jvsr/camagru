@@ -20,15 +20,14 @@ function submitForm() {
 	let formElement = document.querySelector("form");
 	let formData = new FormData(formElement);
 
+	let jsonData = {}
+	for (const [key, value] of formData.entries()) {
+		jsonData[key] = value;
+	}
+
 	let xhttp = new XMLHttpRequest();
-	xhttp.onload = function () {
-		if (xhttp.status === 400) {
-			console.log(xhttp.response);
-			console.log(xhttp.responseText);
-		}
-	};
 	xhttp.open(formElement.method, formElement.action, true);
-	xhttp.send(formData);
+	xhttp.send(JSON.stringify(jsonData));
 };
 
 function redirectRegister() {
