@@ -14,20 +14,39 @@ function setActive () {
 	}
 };
 
+function createJsonFromFormData(formData) {
+	let jsonData = {}
+
+	for (const [key, value] of formData.entries()) {
+		jsonData[key] = value;
+	}
+
+	return (jsonData);
+}
+
 function submitForm() {
 	event.preventDefault();
 
 	let formElement = document.querySelector("form");
 	let formData = new FormData(formElement);
 
-	let jsonData = {}
-	for (const [key, value] of formData.entries()) {
-		jsonData[key] = value;
-	}
+	let jsonData = createJsonFromFormData(formData);
 
-	let xhttp = new XMLHttpRequest();
-	xhttp.open(formElement.method, formElement.action, true);
-	xhttp.send(JSON.stringify(jsonData));
+
+	fetch(formElement.action, {
+        method: formElement.method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jsonData)
+        })
+    .then(res => res.json())
+	.then(res => console.log(res)) 
+	
+	// let xhttp = new XMLHttpRequest();
+	// xhttp.open(formElement.method, formElement.action, true);
+
+	// xhttp.send(JSON.stringify(jsonData));
 };
 
 function redirectRegister() {

@@ -21,6 +21,34 @@ class User
 
     // Create method
     public function create() {
-        return (true);
+        $stmt = $this->conn->prepare(
+                "INSERT INTO " . $this->table_name . "
+                SET
+                    `firstname` = :firstname,
+                    `lastname` = :lastname,
+                    `username` = :username,
+                    `email` = :email,
+                    `password` = :password
+                ");
+        $this->firstname = htmlspecialchars((strip_tags($this->firstname)));
+        $this->lastname = htmlspecialchars((strip_tags($this->lastname)));
+        $this->username = htmlspecialchars((strip_tags($this->username)));
+        $this->email = htmlspecialchars((strip_tags($this->email)));
+        $this->password = htmlspecialchars((strip_tags($this->password)));
+
+        $stmt->bindParam(':firstname', $this->firstname);
+        $stmt->bindParam(':lastname', $this->lastname);
+        $stmt->bindParam(':username', $this->username);
+        $stmt->bindParam(':email', $this->email);
+
+        $pasword_hash = password_hash($this->password, PASSWORD_BCRYPT);
+        $stmt->bindParam(':password', $pasword_hash);
+
+        if ($stmt->execute()) {
+            return true;
+        }
+
+        return false;
+        
     }
 }
