@@ -11,13 +11,13 @@
 <?php include ('navbar.html') ?>
 <div class="loginContainer">
 	<h1>Register</h1>
-	<form method="POST" action="api/user/create.php">
+	<form method="POST" action="api/user/create.php" id="registerForm">
         <input type="text" name="firstname" placeholder="First Name">
         <input type="text" name="lastname" placeholder="Last Name">
         <input type="text" name="email" placeholder="Email">
 		<input type="text" name="username" placeholder="Username">
 		<input type="password" name="password" placeholder="Password">
-        <button type="submit" onclick="submitForm()">Register</button>
+        <button type="submit" onclick="submitForm('registerForm')">Register</button>
 	</form>
 </div>
 
