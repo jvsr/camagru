@@ -45,7 +45,13 @@ if (
     // And user creation succeeds
     $user->create()
 ) {
-    httpResponse(200, "User creation succeeded");
+    if ($user->usernameAvailable()) {
+        httpResponse(400, "Username not available");
+    } elseif ($user->emailAvailable()) {
+        httpResponse(400, "Email not available");
+    } else {
+        httpResponse(200, "User creation succeeded");
+    }
 } else {
     httpResponse(400, "User creation failed");
 }

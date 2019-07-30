@@ -19,6 +19,16 @@ class User
         $this->conn = $database;
     }
 
+    // Check username availability
+    public function usernameAvailable($username) {
+        return true;
+    }
+
+    // Check email availability
+    public function emailAvailable($email) {
+        return true;
+    }
+        
     // Create method
     public function create() {
         $stmt = $this->conn->prepare(
