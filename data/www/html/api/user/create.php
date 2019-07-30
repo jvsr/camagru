@@ -24,7 +24,7 @@ $user = new User($conn);
 $data = json_decode(file_get_contents("php://input"));
 
 if (empty($data)) {
-    httpResponse(400, "User creation failed");
+    httpResponse(400, "Empty user data");
 }
 
 // Set object property values
@@ -41,17 +41,17 @@ if (
     !empty($user->lastname) &&
     !empty($user->username) &&
     !empty($user->email) &&
-    !empty($user->password) &&
-    // And user creation succeeds
-    $user->create()
-) {
-    if ($user->usernameAvailable()) {
+    !empty($user->password)
+){
+    if (!$user->usernameAvailable()) {
         httpResponse(400, "Username not available");
-    } elseif ($user->emailAvailable()) {
+    } elseif (!$user->emailAvailable()) {
         httpResponse(400, "Email not available");
-    } else {
+    } elseif ($user->create()) {
         httpResponse(200, "User creation succeeded");
+    } else {
+        httpResponse(400, "User creation failed");
     }
 } else {
-    httpResponse(400, "User creation failed");
+    httpResponse(400, "Empty user data");
 }

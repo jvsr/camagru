@@ -1,19 +1,3 @@
-function setActive () {
-	const current = location.href
-    var listItems = document.getElementsByClassName("navbar")[0].getElementsByTagName("ul")[0].getElementsByTagName("li");
-
-	for (i = 0; i < listItems.length; i++) {
-		var anchors = listItems[i].getElementsByTagName("a");
-		for (i2 = 0; i2 < anchors.length; i2++) {
-            var href = anchors[i2].href;
-			if (href === current) {
-				anchors[i2].className += "active";
-				return ;
-			}
-		}
-	}
-};
-
 function changeBorderFormInput(id, key, bool) {
 	let formInput = document.getElementById(id).elements[key];
 
@@ -24,7 +8,7 @@ function changeBorderFormInput(id, key, bool) {
 }
 
 function validateFormInputPassword(id, key, length) {
-	if (length <= 8) {
+	if (length < 6) {
 		changeBorderFormInput(id, key, true);
 		return false;
 	}
@@ -76,6 +60,25 @@ function createJsonFromFormData(formData) {
 	return (jsonData);
 }
 
+function removeClass(divClass) {
+	var allDiv = document.getElementsByClassName(divClass);
+	while(allDiv[0])
+		allDiv[0].parentNode.removeChild(allDiv[0]);
+}
+
+function displayMessage(divClass, response) {
+	removeClass('confirmationBox');
+	removeClass('errorBox');
+	var creationMessage = document.createElement('div');
+	creationMessage.className += divClass;
+
+	var messageH1 = document.createElement('h1');
+	messageH1.innerHTML = response['message'];
+
+	creationMessage.appendChild(messageH1);
+	document.body.appendChild(creationMessage);
+}
+
 function submitForm(id) {
 	event.preventDefault();
 
@@ -94,12 +97,15 @@ function submitForm(id) {
             'Content-Type': 'application/json'
         }
 	})
-	.then(res => res.json())
-	.then(response => console.log('Success:', response))
+	.then(response => {
+		response.json().then(json => {
+			if (response.status === 200) {
+				displayMessage('confirmationBox', json);
+			} else {
+				displayMessage('errorBox', json);
+			}
+			console.log('Success:', json);
+		})
+	})
 	.catch(error => console.error('Error:', error));
-};
-
-function redirectRegister() {
-	event.preventDefault();
-	document.location.href = "register.php";
 };
