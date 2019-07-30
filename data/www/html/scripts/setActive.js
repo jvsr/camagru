@@ -76,6 +76,11 @@ function createJsonFromFormData(formData) {
 	return (jsonData);
 }
 
+function printResponse(formElement, response) {
+	console.log(formElement);
+	console.log(response);
+}
+
 function submitForm(id) {
 	event.preventDefault();
 
@@ -89,14 +94,15 @@ function submitForm(id) {
 
 	fetch(formElement.action, {
         method: formElement.method,
+		body: JSON.stringify(jsonData),
         headers: {
             'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(jsonData)
-    })
-    .then(res => res.json())
-	.then(res => console.log(res)) 
-
+        }
+	})
+	.then(res => res.json())
+	.then(response => console.log('Success:', response))
+	.then(response => printResponse(formElement, response))
+	.catch(error => console.error('Error:', error));
 };
 
 function redirectRegister() {

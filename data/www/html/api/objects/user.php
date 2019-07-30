@@ -20,12 +20,28 @@ class User
     }
 
     // Check username availability
-    public function usernameAvailable($username) {
+    public function usernameAvailable() {
+        $stmt = $this->conn->prepare("SELECT * FROM `users` WHERE `username`=:username");
+        $stmt->bindParam(':username', $this->username);
+
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            return false;
+        }
         return true;
     }
 
     // Check email availability
-    public function emailAvailable($email) {
+    public function emailAvailable() {
+        $stmt = $this->conn->prepare("SELECT * FROM `users` WHERE `email`=:email");
+        $stmt->bindParam(':email', $this->email);
+
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            return false;
+        }
         return true;
     }
         
