@@ -4,7 +4,7 @@ class User
 {
     // Database properties
     private $conn;
-    private $table_name = "users";
+    private $tableName = "users";
 
     // Object properties
     public  $id;
@@ -19,22 +19,52 @@ class User
         $this->conn = $database;
     }
 
+    // Check if user exists in database
+    public function usernameExists() {
+        $stmt = $this->conn->prepare(
+            "SELECT `id`, `firstname`, `lastname`, `email`, `password` FROM " . $this->tableName . "
+            WHERE username = :username
+            LIMIT 0,1
+        ");
+        $this->username = htmlspecialchars(strip_tags($this->username));
+        $stmt->bindParam(':username', $this->username);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $this->id = $row['id'];
+            $this->id = $row['firstname'];
+            $this->id = $row['lastname'];
+            $this->id = $row['email'];
+            $this->id = $row['password'];
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // Check username availability
     public function usernameAvailable() {
-        $stmt = $this->conn->prepare("SELECT * FROM `users` WHERE `username`=:username");
+        $stmt = $this->conn->prepare(
+            "SELECT * FROM " . $this->tableName . "
+            WHERE `username`=:username
+        ");
         $stmt->bindParam(':username', $this->username);
 
         $stmt->execute();
 
         if ($stmt->rowCount() > 0) {
             return false;
+        } else {
+            return true;
         }
-        return true;
     }
-
     // Check email availability
     public function emailAvailable() {
-        $stmt = $this->conn->prepare("SELECT * FROM `users` WHERE `email`=:email");
+        $stmt = $this->conn->prepare(
+            "SELECT * FROM " . $this->tableName . "
+            WHERE `email`=:email
+        ");
         $stmt->bindParam(':email', $this->email);
 
         $stmt->execute();
@@ -48,14 +78,14 @@ class User
     // Create method
     public function create() {
         $stmt = $this->conn->prepare(
-                "INSERT INTO " . $this->table_name . "
-                SET
-                    `firstname` = :firstname,
-                    `lastname` = :lastname,
-                    `username` = :username,
-                    `email` = :email,
-                    `password` = :password
-                ");
+            "INSERT INTO " . $this->tableName . "
+            SET
+                `firstname` = :firstname,
+                `lastname` = :lastname,
+                `username` = :username,
+                `email` = :email,
+                `password` = :password
+        ");
         $this->firstname = htmlspecialchars((strip_tags($this->firstname)));
         $this->lastname = htmlspecialchars((strip_tags($this->lastname)));
         $this->username = htmlspecialchars((strip_tags($this->username)));
