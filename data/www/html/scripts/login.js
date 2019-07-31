@@ -35,6 +35,8 @@ function validateFormInput(id, jsonData) {
 		if (length <= 0) {
 			changeBorderFormInput(id, key, true);
 			returnValue = false;
+		} else {
+			changeBorderFormInput(id, key, false);
 		}
 	}
 	return (returnValue);
@@ -67,7 +69,9 @@ function submitForm(id) {
 	})
 	.then(response => {
 		response.json().then(json => {
-            console.log(response.status);
+            if (response.status === 200) {
+				// location.replace('/');
+			}
 			console.log('Success:', json);
 		})
 	})

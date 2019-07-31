@@ -33,10 +33,10 @@ class User
         if ($stmt->rowCount() > 0) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             $this->id = $row['id'];
-            $this->id = $row['firstname'];
-            $this->id = $row['lastname'];
-            $this->id = $row['email'];
-            $this->id = $row['password'];
+            $this->firstname = $row['firstname'];
+            $this->lastname = $row['lastname'];
+            $this->email = $row['email'];
+            $this->password = $row['password'];
             return true;
         } else {
             return false;

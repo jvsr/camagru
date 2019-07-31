@@ -19,6 +19,8 @@ function createJwtToken($user) {
         "alg" => "HS256"
         )
     );
+    $jwtHeaderEncoded = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($jwtHeader));
+
     $jwtPayload = json_encode(array(
         "id" => $user->id,
         "firstname" => $user->firstname,
@@ -27,6 +29,15 @@ function createJwtToken($user) {
         "username" => $user->username
         )
     );
+    $jwtPayloadEncoded = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($jwtPayload));
+
+    $data = $jwtHeaderEncoded . "." . $jwtPayloadEncoded;
+    $jwtSignature = hash_hmac("sha256", $data, "c4m4ragululu#1!wow", true);
+    $jwtSignatureEncoded = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($jwtSignature));
+
+    $jwtToken = $jwtHeaderEncoded . "." . $jwtPayloadEncoded . "." . $jwtSignatureEncoded;
+
+    setcookie("jwt", $jwtToken, time() + 60*60*24, '/');
 }
 
 // Initialize database object
@@ -48,9 +59,10 @@ $user->username = $data->username;
 
 if (
     !empty($user->username) && 
-    !empty($data->password) && 
     $user->usernameExists() &&
-    password_needs_rehash($data->password())
+    !empty($user->password) &&
+    !empty($data->password) &&
+    password_verify($data->password, $user->password)
 ) {
     createJwtToken($user);
     httpResponse(200, "User login succesful");
