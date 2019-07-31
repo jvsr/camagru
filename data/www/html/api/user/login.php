@@ -13,6 +13,22 @@ function httpResponse($code, $message) {
     echo json_encode(array("message" => $message));
 }
 
+function createJwtToken($user) {
+    $jwtHeader = json_encode(array(
+        "typ" => "JWT",
+        "alg" => "HS256"
+        )
+    );
+    $jwtPayload = json_encode(array(
+        "id" => $user->id,
+        "firstname" => $user->firstname,
+        "lastname" => $user->lastname,
+        "email" => $user->email,
+        "username" => $user->username
+        )
+    );
+}
+
 // Initialize database object
 $database = new Database();
 $conn = $database->getConnection();
@@ -36,15 +52,7 @@ if (
     $user->usernameExists() &&
     password_needs_rehash($data->password())
 ) {
-    $token = array(
-        "data" => array (
-            "id" => $user->id,
-            "firstname" => $user->firstname,
-            "lastname" => $user->lastname,
-            "email" => $user->email,
-            "username" => $user->username
-        )
-    );
+    createJwtToken($user);
     httpResponse(200, "User login succesful");
 } else {
     httpResponse(401, "User login failed");
