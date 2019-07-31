@@ -1,3 +1,4 @@
+// Changes border to red if data is invalid
 function changeBorderFormInput(id, key, bool) {
 	let formInput = document.getElementById(id).elements[key];
 
@@ -7,6 +8,8 @@ function changeBorderFormInput(id, key, bool) {
 	}
 }
 
+// Form input validation
+// Password validation, needs to be at least 6 characters
 function validateFormInputPassword(id, key, length) {
 	if (length < 6) {
 		changeBorderFormInput(id, key, true);
@@ -15,10 +18,9 @@ function validateFormInputPassword(id, key, length) {
 	changeBorderFormInput(id, key, false);
 	return true;
 }
-
+// Email validation, following a full regex expression of valid email
 function validateFormInputEmail(id, key, jsonData) {
 	var regex = /^[a-z0-9\._%+!$&*=^|~#%'`?{}/\-]+@([a-z0-9\-]+\.){1,}([a-z]{2,16})$/;
-
 	if (!regex.test(jsonData[key])) {
 		changeBorderFormInput(id, key, true);
 		return false;
@@ -26,7 +28,6 @@ function validateFormInputEmail(id, key, jsonData) {
 	changeBorderFormInput(id, key, false);
 	return true;
 }
-
 function validateFormInput(id, jsonData) {
 	var returnValue = true;
 
@@ -50,16 +51,16 @@ function validateFormInput(id, jsonData) {
 	return (returnValue);
 }
 
+// Creates a JSON from a formData object
 function createJsonFromFormData(formData) {
 	let jsonData = {}
-
 	for (const [key, value] of formData.entries()) {
 		jsonData[key] = value;
 	}
-
 	return (jsonData);
 }
 
+// Removes all elements of certain class from the document
 function removeClass(divClass) {
 	var allDiv = document.getElementsByClassName(divClass);
 	while(allDiv[0])
@@ -88,7 +89,7 @@ function submitForm(id) {
 	let jsonData = createJsonFromFormData(formData);
 
 	if (!validateFormInput(id, jsonData))
-		return;
+		return ;
 
 	fetch(formElement.action, {
         method: formElement.method,
@@ -101,6 +102,7 @@ function submitForm(id) {
 		response.json().then(json => {
 			if (response.status === 200) {
 				displayMessage('confirmationBox', json);
+				formElement.reset();
 			} else {
 				displayMessage('errorBox', json);
 			}
