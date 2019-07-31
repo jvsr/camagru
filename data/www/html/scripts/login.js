@@ -70,7 +70,7 @@ function submitForm(id) {
 	.then(response => {
 		response.json().then(json => {
             if (response.status === 200) {
-				// location.replace('/');
+				location.replace('/');
 			}
 			console.log('Success:', json);
 		})
